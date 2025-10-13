@@ -87,7 +87,6 @@ alumni-app/
 ├── frontend/          # Contains frontend code (HTML, CSS, JS)
 ├── backend/           # Contains backend code (Django project)
 ├── database/          # Database scripts and migrations
-├── docs/              # Additional documentation
 ├── templates/         # HTML templates for the application
 ├── static/            # Static files (CSS, JS, images)
 └── README.md          # Project overview and documentation
