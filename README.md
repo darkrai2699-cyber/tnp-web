@@ -161,4 +161,4 @@ We welcome contributions and feedback to improve the project further!
 
 ---
 
-**Developed with ❤️ by the Alumni Management Portal Team**
+**Proudly developed by the Alumni Management Portal Team with dedication and passion.**
