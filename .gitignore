@@ -1,2 +1,21 @@
-AlumniManagement/firebase-debug.log
-AlumniManagement/firebase-debug.log
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3-journal
+
+# Environment variables
+.env
+
+# Logs
+firebase-debug.log

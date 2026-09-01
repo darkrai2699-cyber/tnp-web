@@ -1,0 +1,326 @@
+{% extends 'alumni/base.html' %}
+{% load static %}
+
+{% block title %}Alumni Registration | Alumni Portal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .registration-form-card {
+        background: #ffffff;
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--border-light);
+        box-shadow: var(--shadow-xl);
+        padding: 3rem;
+        margin-bottom: 4rem;
+    }
+
+    .form-section-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1.5px solid var(--border-light);
+    }
+
+    .form-section-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: var(--radius-sm);
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        color: var(--brand-blue);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+
+    .form-section-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0;
+    }
+
+    .avatar-preview-box {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        border: 3px dashed var(--border-light);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-surface-alt);
+        color: var(--text-light);
+        margin-bottom: 0.75rem;
+        position: relative;
+    }
+
+    .avatar-preview-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+    }
+
+    .form-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-main);
+        margin-bottom: 0.4rem;
+    }
+
+    .form-label .required-star {
+        color: #ef4444;
+    }
+
+    @media (max-width: 768px) {
+        .registration-form-card {
+            padding: 2rem 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Subpage Hero -->
+<section class="subpage-hero">
+    <div class="container-xl">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="subpage-badge"><i class="fas fa-user-plus"></i> Join the Network</span>
+                <h1 class="subpage-title">Alumni Registration</h1>
+                <p class="subpage-lead">
+                    Create your official alumni profile to stay connected with batchmates, participate in events, and mentor aspiring students.
+                </p>
+                <div class="subpage-breadcrumbs">
+                    <a href="{% url 'index' %}"><i class="fas fa-home"></i> Home</a>
+                    <i class="fas fa-chevron-right text-white-50" style="font-size: 0.7rem;"></i>
+                    <span class="text-warning">Registration</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Registration Form -->
+<section class="py-5">
+    <div class="container-xl">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-9">
+                <div class="registration-form-card">
+                    <form method="post" enctype="multipart/form-data" action="{% url 'alumni_registration' %}">
+                        {% csrf_token %}
+
+                        <!-- Section 1: Account & Credentials -->
+                        <div class="mb-5">
+                            <div class="form-section-header">
+                                <div class="form-section-icon"><i class="fas fa-id-badge"></i></div>
+                                <h3 class="form-section-title">1. Account &amp; Login Credentials</h3>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Full Name <span class="required-star">*</span></label>
+                                    {{ form.full_name }}
+                                    {% if form.full_name.errors %}<div class="text-danger small mt-1">{{ form.full_name.errors }}</div>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email Address <span class="required-star">*</span></label>
+                                    {{ form.email }}
+                                    {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors }}</div>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Password <span class="required-star">*</span></label>
+                                    {{ form.password }}
+                                    <small class="text-muted" style="font-size: 0.75rem;">Minimum 6 characters with mixed characters recommended.</small>
+                                    {% if form.password.errors %}<div class="text-danger small mt-1">{{ form.password.errors }}</div>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Mobile Number</label>
+                                    {{ form.mobile }}
+                                    <small class="text-muted" style="font-size: 0.75rem;">e.g. +91 9876543210</small>
+                                    {% if form.mobile.errors %}<div class="text-danger small mt-1">{{ form.mobile.errors }}</div>{% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Academic Details -->
+                        <div class="mb-5">
+                            <div class="form-section-header">
+                                <div class="form-section-icon"><i class="fas fa-graduation-cap"></i></div>
+                                <h3 class="form-section-title">2. Academic Background</h3>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Year of Graduation <span class="required-star">*</span></label>
+                                    {{ form.graduation_year }}
+                                    <small class="text-muted" style="font-size: 0.75rem;">Passout year from PMEC E&amp;TC</small>
+                                    {% if form.graduation_year.errors %}<div class="text-danger small mt-1">{{ form.graduation_year.errors }}</div>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Industry / Sector</label>
+                                    {{ form.sector }}
+                                    <small class="text-muted" style="font-size: 0.75rem;">e.g. Telecommunications, Software, Semiconductor</small>
+                                    {% if form.sector.errors %}<div class="text-danger small mt-1">{{ form.sector.errors }}</div>{% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Professional & Career Profile -->
+                        <div class="mb-5">
+                            <div class="form-section-header">
+                                <div class="form-section-icon"><i class="fas fa-briefcase"></i></div>
+                                <h3 class="form-section-title">3. Current Employment</h3>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Current Job Role / Designation</label>
+                                    {{ form.current_job_profile }}
+                                    {% if form.current_job_profile.errors %}<div class="text-danger small mt-1">{{ form.current_job_profile.errors }}</div>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Organization / Company Name</label>
+                                    {{ form.current_company }}
+                                    {% if form.current_company.errors %}<div class="text-danger small mt-1">{{ form.current_company.errors }}</div>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Work Location</label>
+                                    {{ form.current_job_location }}
+                                    {% if form.current_job_location.errors %}<div class="text-danger small mt-1">{{ form.current_job_location.errors }}</div>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Total Experience (Years)</label>
+                                    {{ form.experience }}
+                                    {% if form.experience.errors %}<div class="text-danger small mt-1">{{ form.experience.errors }}</div>{% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Address & Location -->
+                        <div class="mb-5">
+                            <div class="form-section-header">
+                                <div class="form-section-icon"><i class="fas fa-map-marker-alt"></i></div>
+                                <h3 class="form-section-title">4. Address &amp; Location Details</h3>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">City <span class="required-star">*</span></label>
+                                    {{ form.city }}
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">District <span class="required-star">*</span></label>
+                                    {{ form.district }}
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Sub-District / Taluka</label>
+                                    {{ form.sub_district }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">State <span class="required-star">*</span></label>
+                                    {{ form.state }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Pincode <span class="required-star">*</span></label>
+                                    {{ form.pincode }}
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check my-1">
+                                        {{ form.is_international }}
+                                        <label class="form-check-label text-muted" for="{{ form.is_international.id_for_label }}">
+                                            I currently reside outside India (International Alumnus)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Country (if outside India)</label>
+                                    {{ form.country }}
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Full Residential Address <span class="required-star">*</span></label>
+                                    {{ form.full_address }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 5: Social Profiles, Photo & Bio -->
+                        <div class="mb-5">
+                            <div class="form-section-header">
+                                <div class="form-section-icon"><i class="fas fa-share-alt"></i></div>
+                                <h3 class="form-section-title">5. Social Media, Photo &amp; Bio</h3>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label"><i class="fab fa-linkedin text-primary me-1"></i> LinkedIn Profile URL</label>
+                                    {{ form.linkedin }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label"><i class="fab fa-github text-dark me-1"></i> GitHub Profile URL</label>
+                                    {{ form.github }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label"><i class="fab fa-facebook text-primary me-1"></i> Facebook Profile URL</label>
+                                    {{ form.facebook }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label"><i class="fab fa-instagram text-danger me-1"></i> Instagram Profile URL</label>
+                                    {{ form.instagram }}
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Profile Photo</label>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="avatar-preview-box" id="avatarPreviewBox">
+                                            <i class="fas fa-user fa-2x" id="avatarPlaceholderIcon"></i>
+                                            <img id="avatarPreviewImg" src="" alt="Preview">
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            {{ form.profile_photo }}
+                                            <small class="text-muted d-block mt-1">Recommended: Square format JPG/PNG/WEBP under 2MB.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Brief Professional Summary / Bio</label>
+                                    {{ form.description }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pt-3 border-top">
+                            <a href="{% url 'alumni_login' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                                <i class="fas fa-arrow-left me-1"></i> Back to Login
+                            </a>
+                            <button type="submit" class="btn btn-modern btn-modern-primary px-5 py-3 fs-6 fw-bold">
+                                <i class="fas fa-check-circle me-1"></i> Complete Alumni Registration
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const photoInput = document.getElementById('profilePhotoInput');
+    const previewImg = document.getElementById('avatarPreviewImg');
+    const placeholderIcon = document.getElementById('avatarPlaceholderIcon');
+
+    if (photoInput) {
+        photoInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
+                    placeholderIcon.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+</script>
+{% endblock %}

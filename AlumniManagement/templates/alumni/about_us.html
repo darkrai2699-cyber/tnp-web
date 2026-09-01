@@ -1,0 +1,200 @@
+{% extends 'alumni/base.html' %}
+{% load static %}
+
+{% block title %}About Us | Department of E&TC{% endblock %}
+
+{% block extra_css %}
+<style>
+    .about-feature-card {
+        background: #ffffff;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-light);
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+        height: 100%;
+        transition: var(--transition);
+    }
+
+    .about-feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-xl);
+        border-color: rgba(37, 99, 235, 0.3);
+    }
+
+    .feature-icon-circle {
+        width: 56px;
+        height: 56px;
+        border-radius: var(--radius-md);
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        color: var(--brand-blue);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .vision-mission-box {
+        background: linear-gradient(135deg, #070d1e 0%, #0f1c3f 100%);
+        color: #ffffff;
+        border-radius: var(--radius-xl);
+        padding: 3.5rem 2.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .vision-mission-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .timeline-badge-year {
+        display: inline-block;
+        background: var(--brand-gold);
+        color: #070d1e;
+        font-weight: 800;
+        padding: 0.35rem 1rem;
+        border-radius: var(--radius-pill);
+        font-size: 0.88rem;
+        margin-bottom: 0.75rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Subpage Hero -->
+<section class="subpage-hero">
+    <div class="container-xl">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="subpage-badge"><i class="fas fa-university"></i> Institutional Heritage</span>
+                <h1 class="subpage-title">About the Alumni Portal &amp; Department</h1>
+                <p class="subpage-lead">
+                    Parala Maharaja Engineering College (PMEC), Berhampur &bull; Department of Electronics &amp; Telecommunication Engineering
+                </p>
+                <div class="subpage-breadcrumbs">
+                    <a href="{% url 'index' %}"><i class="fas fa-home"></i> Home</a>
+                    <i class="fas fa-chevron-right text-white-50" style="font-size: 0.7rem;"></i>
+                    <span class="text-warning">About Us</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- College & Dept Overview -->
+<section class="py-5">
+    <div class="container-xl">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <span class="text-primary fw-bold text-uppercase fs-6 mb-2 d-block" style="letter-spacing: 1.2px;">
+                    <i class="fas fa-award me-1"></i> Premier Government Engineering Institution
+                </span>
+                <h2 class="heading-font fw-bold fs-1 mb-3">Empowering Engineering Visionaries</h2>
+                <p class="text-muted leading-relaxed mb-3">
+                    <strong>Parala Maharaja Engineering College (PMEC), Berhampur</strong> is one of the premier Government Engineering Colleges in Odisha, named in honor of the revered king of Paralakhemundi, Maharaja Krushna Chandra Gajapati Dev. The institution is affiliated with Biju Patnaik University of Technology (BPUT).
+                </p>
+                <p class="text-muted leading-relaxed mb-4">
+                    The <strong>Department of Electronics &amp; Telecommunication (E&amp;TC)</strong> is dedicated to imparting world-class technical education, fostering innovation, and developing competent professionals who excel in the global electronics, computing, and communications industries.
+                </p>
+                
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <h4 class="fw-bold text-primary mb-1">PMEC</h4>
+                            <p class="text-muted small mb-0">Govt. College of Odisha</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <h4 class="fw-bold text-primary mb-1">BPUT</h4>
+                            <p class="text-muted small mb-0">University Affiliation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="vision-mission-box">
+                    <div class="mb-4">
+                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold text-uppercase mb-2">
+                            <i class="fas fa-eye me-1"></i> Department Vision
+                        </span>
+                        <p class="text-white-50 mt-2 mb-0" style="line-height: 1.7;">
+                            To achieve academic and research excellence in Electronics &amp; Telecommunication Engineering, creating globally competent, ethical, and socially responsible engineers who drive technological progress.
+                        </p>
+                    </div>
+                    <hr class="border-secondary my-4">
+                    <div>
+                        <span class="badge bg-info text-dark px-3 py-1 rounded-pill fw-bold text-uppercase mb-2">
+                            <i class="fas fa-bullseye me-1"></i> Department Mission
+                        </span>
+                        <ul class="text-white-50 mt-2 mb-0 ps-3" style="line-height: 1.8;">
+                            <li>Provide state-of-the-art curriculum, laboratories, and hands-on technical environments.</li>
+                            <li>Promote interdisciplinary research, innovation, and startup culture.</li>
+                            <li>Foster strong alumni–institution collaborations and mentorship networks.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Purpose of Alumni Portal -->
+<section class="py-5 bg-light">
+    <div class="container-xl">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="text-primary fw-bold text-uppercase fs-6" style="letter-spacing: 1.2px;">
+                <i class="fas fa-network-wired me-1"></i> Portal Objectives
+            </span>
+            <h2 class="heading-font fw-bold fs-1 mt-1">Why This Portal Exists</h2>
+            <p class="text-muted">Bridging the gap between our esteemed alumni community and current student body.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="about-feature-card">
+                    <div class="feature-icon-circle">
+                        <i class="fas fa-address-book"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Centralized Alumni Records</h4>
+                    <p class="text-muted small mb-0">
+                        Maintaining a secure, digitized directory of alumni profiles across all graduation batches with up-to-date industry roles, locations, and contact details.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="about-feature-card">
+                    <div class="feature-icon-circle">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Batch Mentorship System</h4>
+                    <p class="text-muted small mb-0">
+                        Connecting experienced faculty mentors with dedicated alumni batches to provide continuous career counseling, mock interviews, and industry insights for students.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="about-feature-card">
+                    <div class="feature-icon-circle">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Event &amp; Reunion Hub</h4>
+                    <p class="text-muted small mb-0">
+                        Broadcasting departmental seminars, silver/golden jubilee reunions, technical workshops, and downloadable event schedules in real-time.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

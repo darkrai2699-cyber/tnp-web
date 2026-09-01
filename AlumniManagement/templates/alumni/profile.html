@@ -1,0 +1,287 @@
+{% extends 'alumni/base.html' %}
+{% load static %}
+
+{% block title %}{{ alumni.full_name }} | Alumni Profile{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-banner-hero {
+        background: linear-gradient(135deg, #070d1e 0%, #0c1938 50%, #1e3a8a 100%);
+        padding: 4.5rem 0 5rem;
+        color: #ffffff;
+        position: relative;
+    }
+
+    .profile-banner-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.18) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .profile-card-wrapper {
+        margin-top: -4rem;
+        position: relative;
+        z-index: 10;
+        margin-bottom: 4rem;
+    }
+
+    .profile-header-card {
+        background: #ffffff;
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--border-light);
+        box-shadow: var(--shadow-xl);
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .profile-avatar-large {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #ffffff;
+        box-shadow: var(--shadow-lg);
+        background: #0f172a;
+    }
+
+    .profile-avatar-initials {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        border: 4px solid #ffffff;
+        box-shadow: var(--shadow-lg);
+        background: linear-gradient(135deg, var(--brand-blue) 0%, #1e3a8a 100%);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        font-weight: 800;
+        font-family: 'Outfit', sans-serif;
+    }
+
+    .info-section-card {
+        background: #ffffff;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-light);
+        box-shadow: var(--shadow-md);
+        padding: 2rem;
+        height: 100%;
+        transition: var(--transition);
+    }
+
+    .info-section-card:hover {
+        box-shadow: var(--shadow-lg);
+        border-color: rgba(37, 99, 235, 0.3);
+    }
+
+    .info-item-label {
+        font-size: 0.78rem;
+        color: var(--text-light);
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        margin-bottom: 0.2rem;
+    }
+
+    .info-item-val {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-main);
+        margin-bottom: 1.25rem;
+    }
+
+    .social-badge-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.5rem 1.2rem;
+        border-radius: var(--radius-pill);
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: var(--transition);
+        border: 1px solid var(--border-light);
+        color: var(--text-main);
+        background: var(--bg-surface-alt);
+    }
+
+    .social-badge-link:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Banner Hero -->
+<section class="profile-banner-hero">
+    <div class="container-xl position-relative">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold text-uppercase mb-2">
+                    <i class="fas fa-user-check me-1"></i> Alumni Portal Member
+                </span>
+                <h1 class="heading-font fw-bold text-white fs-1 mb-1">{{ alumni.full_name }}</h1>
+                <p class="text-white-50 mb-0">Department of Electronics &amp; Telecommunication Engineering</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'edit_profile' %}" class="btn btn-warning rounded-pill px-4 fw-bold text-dark shadow-sm">
+                    <i class="fas fa-edit me-1"></i> Edit Profile
+                </a>
+                <a href="{% url 'logout' %}" class="btn btn-outline-light rounded-pill px-3">
+                    <i class="fas fa-sign-out-alt me-1"></i> Sign Out
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Profile Body -->
+<div class="container-xl profile-card-wrapper">
+    <!-- Header Summary Card -->
+    <div class="profile-header-card">
+        <div class="row align-items-center g-4">
+            <div class="col-md-auto text-center text-md-start">
+                {% if alumni.profile_photo %}
+                    <img src="{{ alumni.profile_photo.url }}" alt="{{ alumni.full_name }}" class="profile-avatar-large">
+                {% else %}
+                    <div class="profile-avatar-initials mx-auto mx-md-0">
+                        {{ alumni.full_name|slice:":2"|upper }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md">
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                    <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-pill fw-bold">
+                        <i class="fas fa-graduation-cap me-1"></i> Batch {{ alumni.graduation_year }}
+                    </span>
+                    {% if alumni.is_top_alumni %}
+                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold">
+                            <i class="fas fa-star me-1"></i> Distinguished Alumni
+                        </span>
+                    {% endif %}
+                    {% if alumni.is_international %}
+                        <span class="badge bg-info text-dark px-3 py-1 rounded-pill fw-bold">
+                            <i class="fas fa-globe me-1"></i> International Alumnus
+                        </span>
+                    {% endif %}
+                </div>
+                <h2 class="heading-font fw-bold fs-2 mb-1">{{ alumni.full_name }}</h2>
+                <p class="text-primary fw-bold fs-6 mb-1">
+                    {{ alumni.current_job_profile|default:"Professional" }} 
+                    {% if alumni.current_company %}&bull; <span class="text-muted">{{ alumni.current_company }}</span>{% endif %}
+                </p>
+                <p class="text-muted small mb-0">
+                    <i class="fas fa-map-marker-alt text-danger me-1"></i> {{ alumni.city }}, {{ alumni.district }}, {{ alumni.state }}
+                    {% if alumni.is_international and alumni.country %}, {{ alumni.country }}{% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Detail Sections -->
+    <div class="row g-4">
+        <!-- Professional Career -->
+        <div class="col-lg-6">
+            <div class="info-section-card">
+                <h4 class="heading-font fw-bold fs-5 text-primary mb-4 pb-2 border-bottom">
+                    <i class="fas fa-briefcase me-2"></i> Professional Experience
+                </h4>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="info-item-label">Job Title / Designation</div>
+                        <div class="info-item-val">{{ alumni.current_job_profile|default:"Not specified" }}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="info-item-label">Organization / Company</div>
+                        <div class="info-item-val">{{ alumni.current_company|default:"Not specified" }}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="info-item-label">Work Location</div>
+                        <div class="info-item-val">{{ alumni.current_job_location|default:"Not specified" }}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="info-item-label">Total Experience</div>
+                        <div class="info-item-val">{{ alumni.experience }} Years</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="info-item-label">Sector / Domain</div>
+                        <div class="info-item-val">{{ alumni.sector|default:"Electronics & Telecommunication" }}</div>
+                    </div>
+                </div>
+
+                {% if alumni.description %}
+                    <div class="mt-3 pt-3 border-top">
+                        <div class="info-item-label">Bio &amp; Career Summary</div>
+                        <p class="text-muted small mb-0">{{ alumni.description }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Academic & Contact Coordinates -->
+        <div class="col-lg-6">
+            <div class="info-section-card">
+                <h4 class="heading-font fw-bold fs-5 text-primary mb-4 pb-2 border-bottom">
+                    <i class="fas fa-address-card me-2"></i> Academic &amp; Contact Details
+                </h4>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="info-item-label">Email Address</div>
+                        <div class="info-item-val">{{ alumni.email }}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="info-item-label">Contact Number</div>
+                        <div class="info-item-val">{{ alumni.mobile|default:"Not provided" }}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="info-item-label">Graduation Batch</div>
+                        <div class="info-item-val">{{ alumni.graduation_year }}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="info-item-label">Department</div>
+                        <div class="info-item-val">Electronics &amp; Telecommunication</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="info-item-label">Residential Address</div>
+                        <div class="info-item-val">{{ alumni.full_address|default:"Not provided" }}</div>
+                    </div>
+                </div>
+
+                <!-- Social Connect Buttons -->
+                <div class="mt-3 pt-3 border-top">
+                    <div class="info-item-label mb-2">Connected Social Handles</div>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% if alumni.linkedin %}
+                            <a href="{{ alumni.linkedin }}" target="_blank" rel="noopener" class="social-badge-link text-primary">
+                                <i class="fab fa-linkedin fs-5"></i> LinkedIn
+                            </a>
+                        {% endif %}
+                        {% if alumni.github %}
+                            <a href="{{ alumni.github }}" target="_blank" rel="noopener" class="social-badge-link text-dark">
+                                <i class="fab fa-github fs-5"></i> GitHub
+                            </a>
+                        {% endif %}
+                        {% if alumni.facebook %}
+                            <a href="{{ alumni.facebook }}" target="_blank" rel="noopener" class="social-badge-link text-primary">
+                                <i class="fab fa-facebook fs-5"></i> Facebook
+                            </a>
+                        {% endif %}
+                        {% if alumni.instagram %}
+                            <a href="{{ alumni.instagram }}" target="_blank" rel="noopener" class="social-badge-link text-danger">
+                                <i class="fab fa-instagram fs-5"></i> Instagram
+                            </a>
+                        {% endif %}
+                        {% if not alumni.linkedin and not alumni.github and not alumni.facebook and not alumni.instagram %}
+                            <span class="text-muted small">No social links added yet.</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

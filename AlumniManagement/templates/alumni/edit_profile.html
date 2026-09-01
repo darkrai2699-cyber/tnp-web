@@ -1,0 +1,263 @@
+{% extends 'alumni/base.html' %}
+{% load static %}
+
+{% block title %}Edit Profile | Alumni Portal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .edit-form-card {
+        background: #ffffff;
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--border-light);
+        box-shadow: var(--shadow-xl);
+        padding: 3rem;
+        margin-bottom: 4rem;
+    }
+
+    .form-section-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1.5px solid var(--border-light);
+    }
+
+    .form-section-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: var(--radius-sm);
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        color: var(--brand-blue);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+
+    .form-section-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0;
+    }
+
+    .avatar-preview-box {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 3px solid var(--border-light);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-surface-alt);
+        margin-bottom: 0.5rem;
+    }
+
+    .avatar-preview-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .form-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-main);
+        margin-bottom: 0.4rem;
+    }
+
+    @media (max-width: 768px) {
+        .edit-form-card {
+            padding: 2rem 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Subpage Hero -->
+<section class="subpage-hero">
+    <div class="container-xl">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="subpage-badge"><i class="fas fa-user-edit"></i> Profile Management</span>
+                <h1 class="subpage-title">Edit Your Alumni Profile</h1>
+                <p class="subpage-lead">
+                    Keep your professional milestones, contact details, and location up to date for batchmates and mentors.
+                </p>
+                <div class="subpage-breadcrumbs">
+                    <a href="{% url 'index' %}"><i class="fas fa-home"></i> Home</a>
+                    <i class="fas fa-chevron-right text-white-50" style="font-size: 0.7rem;"></i>
+                    <a href="{% url 'alumni_profile' %}">Profile</a>
+                    <i class="fas fa-chevron-right text-white-50" style="font-size: 0.7rem;"></i>
+                    <span class="text-warning">Edit Profile</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Form Container -->
+<section class="py-5">
+    <div class="container-xl">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-9">
+                <div class="edit-form-card">
+                    <form method="post" enctype="multipart/form-data" action="{% url 'edit_profile' %}">
+                        {% csrf_token %}
+
+                        <!-- Section 1: Professional Career -->
+                        <div class="mb-5">
+                            <div class="form-section-header">
+                                <div class="form-section-icon"><i class="fas fa-briefcase"></i></div>
+                                <h3 class="form-section-title">1. Current Employment</h3>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Job Title / Designation</label>
+                                    {{ form.current_job_profile }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Organization / Company</label>
+                                    {{ form.current_company }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Work Location</label>
+                                    {{ form.current_job_location }}
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Career Bio / Summary</label>
+                                    {{ form.description }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Residential Address -->
+                        <div class="mb-5">
+                            <div class="form-section-header">
+                                <div class="form-section-icon"><i class="fas fa-map-marker-alt"></i></div>
+                                <h3 class="form-section-title">2. Address &amp; Location</h3>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">City</label>
+                                    {{ form.city }}
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">District</label>
+                                    {{ form.district }}
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Sub-District / Taluka</label>
+                                    {{ form.sub_district }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">State</label>
+                                    {{ form.state }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Pincode</label>
+                                    {{ form.pincode }}
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check my-1">
+                                        {{ form.is_international }}
+                                        <label class="form-check-label text-muted" for="{{ form.is_international.id_for_label }}">
+                                            I currently reside outside India (International Alumnus)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Country (if international)</label>
+                                    {{ form.country }}
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Full Address</label>
+                                    {{ form.full_address }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Profile Photo & Social Links -->
+                        <div class="mb-5">
+                            <div class="form-section-header">
+                                <div class="form-section-icon"><i class="fas fa-camera"></i></div>
+                                <h3 class="form-section-title">3. Photo &amp; Social Media</h3>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">Profile Photo</label>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="avatar-preview-box" id="avatarPreviewBox">
+                                            {% if alumni.profile_photo %}
+                                                <img id="avatarPreviewImg" src="{{ alumni.profile_photo.url }}" alt="{{ alumni.full_name }}">
+                                            {% else %}
+                                                <i class="fas fa-user fa-2x text-muted" id="avatarPlaceholderIcon"></i>
+                                                <img id="avatarPreviewImg" src="" alt="Preview" style="display: none;">
+                                            {% endif %}
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            {{ form.profile_photo }}
+                                            <small class="text-muted d-block mt-1">Upload JPG/PNG/WEBP to change profile picture.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label"><i class="fab fa-linkedin text-primary me-1"></i> LinkedIn URL</label>
+                                    {{ form.linkedin }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label"><i class="fab fa-github text-dark me-1"></i> GitHub URL</label>
+                                    {{ form.github }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label"><i class="fab fa-facebook text-primary me-1"></i> Facebook URL</label>
+                                    {{ form.facebook }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label"><i class="fab fa-instagram text-danger me-1"></i> Instagram URL</label>
+                                    {{ form.instagram }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pt-3 border-top">
+                            <a href="{% url 'alumni_profile' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                                <i class="fas fa-times me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-modern btn-modern-primary px-5 py-3 fs-6 fw-bold">
+                                <i class="fas fa-save me-1"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const photoInput = document.getElementById('profilePhotoInput');
+    const previewImg = document.getElementById('avatarPreviewImg');
+    const placeholderIcon = document.getElementById('avatarPlaceholderIcon');
+
+    if (photoInput) {
+        photoInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
+                    if (placeholderIcon) placeholderIcon.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,189 @@
+{% extends 'alumni/base.html' %}
+{% load static %}
+
+{% block title %}Photo Gallery | Alumni Portal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .gallery-grid-card {
+        background: #ffffff;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        border: 1px solid var(--border-light);
+        box-shadow: var(--shadow-md);
+        transition: var(--transition);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .gallery-grid-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-xl);
+        border-color: rgba(37, 99, 235, 0.4);
+    }
+
+    .gallery-img-box {
+        position: relative;
+        aspect-ratio: 16/10;
+        overflow: hidden;
+        background: #0f172a;
+    }
+
+    .gallery-img-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .gallery-grid-card:hover .gallery-img-box img {
+        transform: scale(1.06);
+    }
+
+    .gallery-zoom-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(7, 13, 30, 0.7);
+        color: #ffffff;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        backdrop-filter: blur(4px);
+        opacity: 0;
+        transform: scale(0.8);
+        transition: var(--transition);
+    }
+
+    .gallery-grid-card:hover .gallery-zoom-badge {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .gallery-caption-body {
+        padding: 1.25rem 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .gallery-item-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 0.35rem;
+    }
+
+    .gallery-item-desc {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin-bottom: 0;
+        flex-grow: 1;
+    }
+
+    /* Modal Lightbox */
+    .modal-lightbox-img {
+        max-height: 75vh;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+        border-radius: var(--radius-md);
+        display: block;
+        margin: 0 auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Subpage Hero -->
+<section class="subpage-hero">
+    <div class="container-xl">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="subpage-badge"><i class="fas fa-images"></i> Campus Life &amp; Events</span>
+                <h1 class="subpage-title">Photo Gallery</h1>
+                <p class="subpage-lead">
+                    Revisit cherished memories from department events, annual fests, technical competitions, sports meets, and farewell galas.
+                </p>
+                <div class="subpage-breadcrumbs">
+                    <a href="{% url 'index' %}"><i class="fas fa-home"></i> Home</a>
+                    <i class="fas fa-chevron-right text-white-50" style="font-size: 0.7rem;"></i>
+                    <span class="text-warning">Gallery</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Grid -->
+<section class="py-5">
+    <div class="container-xl">
+        <div class="row g-4">
+            {% for photo in photos %}
+            <div class="col-lg-4 col-md-6">
+                <div class="gallery-grid-card" onclick="openLightbox('{{ photo.image.url }}', '{{ photo.title|escapejs }}', '{{ photo.description|escapejs }}')">
+                    <div class="gallery-img-box">
+                        <img src="{{ photo.image.url }}" alt="{{ photo.title }}" loading="lazy">
+                        <div class="gallery-zoom-badge">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                    </div>
+                    <div class="gallery-caption-body">
+                        <h4 class="gallery-item-title">{{ photo.title }}</h4>
+                        {% if photo.description %}
+                            <p class="gallery-item-desc">{{ photo.description }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <div class="p-5 bg-white rounded-4 border">
+                    <i class="fas fa-camera text-primary fa-3x mb-3"></i>
+                    <h4 class="fw-bold">No Photos in Gallery Yet</h4>
+                    <p class="text-muted">Check back soon as department memories and event captures are uploaded.</p>
+                    <a href="{% url 'index' %}" class="btn btn-outline-primary rounded-pill px-4 mt-2">
+                        <i class="fas fa-arrow-left me-1"></i> Return Home
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Lightbox Modal -->
+<div class="modal fade" id="galleryLightboxModal" tabindex="-1" aria-labelledby="galleryLightboxLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 rounded-4 shadow-2xl overflow-hidden bg-dark text-white">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title heading-font text-white" id="lightboxTitle">Photo Preview</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+                <img id="lightboxImg" src="" alt="Full view" class="modal-lightbox-img mb-3">
+                <p id="lightboxDesc" class="text-white-50 small mb-0"></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function openLightbox(url, title, description) {
+        document.getElementById('lightboxImg').src = url;
+        document.getElementById('lightboxTitle').textContent = title || 'Gallery Image';
+        document.getElementById('lightboxDesc').textContent = description || '';
+        const modal = new bootstrap.Modal(document.getElementById('galleryLightboxModal'));
+        modal.show();
+    }
+</script>
+{% endblock %}

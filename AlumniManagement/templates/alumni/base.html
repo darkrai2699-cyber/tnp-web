@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Alumni Portal{% endblock %} | Parala Maharaja Engineering College</title>
+    {% load static %}
+    {% load tz %}
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 & FontAwesome 6 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --brand-dark: #070d1e;
+            --brand-navy: #0f1c3f;
+            --brand-blue: #1d4ed8;
+            --brand-blue-light: #3b82f6;
+            --brand-cyan: #06b6d4;
+            --brand-gold: #f59e0b;
+            --brand-amber: #d97706;
+            --brand-gold-glow: rgba(245, 158, 11, 0.25);
+            
+            --bg-body: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-surface-alt: #f1f5f9;
+            --bg-card-hover: #ffffff;
+            
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            --text-white: #ffffff;
+            
+            --border-light: #e2e8f0;
+            --border-card: rgba(226, 232, 240, 0.8);
+            
+            --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+            --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+            --shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.1), 0 4px 6px -2px rgba(15, 23, 42, 0.05);
+            --shadow-xl: 0 20px 35px -5px rgba(15, 23, 42, 0.15), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+            --shadow-gold: 0 10px 25px -5px rgba(245, 158, 11, 0.35);
+            --shadow-blue: 0 10px 25px -5px rgba(37, 99, 235, 0.35);
+            
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-pill: 9999px;
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6, .heading-font {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        /* ===== MAIN NAVIGATION ===== */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1040;
+            background: rgba(7, 13, 30, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            transition: var(--transition);
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-white);
+        }
+
+        .brand-icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-cyan) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.4);
+            flex-shrink: 0;
+        }
+
+        .brand-text h1 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            margin: 0;
+            color: var(--text-white);
+            line-height: 1.1;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .brand-text h1 span {
+            color: var(--brand-gold);
+        }
+
+        .brand-text p {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.65);
+            margin: 0;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .desktop-nav {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .desktop-nav .nav-link-item {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.88rem;
+            font-weight: 500;
+            padding: 0.55rem 0.95rem;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            transition: var(--transition);
+        }
+
+        .desktop-nav .nav-link-item i {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            color: var(--brand-cyan);
+        }
+
+        .desktop-nav .nav-link-item:hover,
+        .desktop-nav .nav-link-item.active {
+            color: var(--text-white);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-portal-dropdown {
+            background: linear-gradient(135deg, var(--brand-blue) 0%, #1e40af 100%);
+            color: #ffffff;
+            border: none;
+            padding: 0.55rem 1.25rem;
+            border-radius: var(--radius-pill);
+            font-weight: 600;
+            font-size: 0.88rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-blue);
+            transition: var(--transition);
+        }
+
+        .btn-portal-dropdown:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(29, 78, 216, 0.5);
+            color: #ffffff;
+        }
+
+        .portal-menu-dropdown {
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-xl);
+            padding: 0.5rem;
+            min-width: 240px;
+        }
+
+        .portal-menu-dropdown .dropdown-item {
+            padding: 0.65rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+
+        .portal-menu-dropdown .dropdown-item i {
+            width: 20px;
+            font-size: 0.95rem;
+            color: var(--brand-blue);
+        }
+
+        .portal-menu-dropdown .dropdown-item:hover {
+            background-color: var(--bg-surface-alt);
+            color: var(--brand-blue);
+            transform: translateX(4px);
+        }
+
+        .user-pill-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 0.45rem 1rem;
+            border-radius: var(--radius-pill);
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .user-pill-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+        }
+
+        /* Mobile Hamburger */
+        .mobile-menu-toggle {
+            display: none;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            font-size: 1.1rem;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .mobile-menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobile Offcanvas Drawer */
+        .mobile-drawer {
+            background-color: var(--brand-dark);
+            color: var(--text-white);
+            width: 300px;
+        }
+
+        .mobile-drawer .offcanvas-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.25rem 1.5rem;
+        }
+
+        .mobile-drawer .nav-link-mobile {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .mobile-drawer .nav-link-mobile:hover,
+        .mobile-drawer .nav-link-mobile.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--brand-gold);
+        }
+
+        /* ===== FLASH NOTIFICATIONS ===== */
+        .flash-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1060;
+            max-width: 420px;
+            width: calc(100% - 40px);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .custom-alert {
+            pointer-events: auto;
+            border: none;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-xl);
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            background: #ffffff;
+        }
+
+        .alert-success-custom {
+            border-left: 4px solid #10b981;
+            color: #065f46;
+        }
+
+        .alert-error-custom {
+            border-left: 4px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .alert-info-custom {
+            border-left: 4px solid #3b82f6;
+            color: #1e40af;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ===== PAGE HERO BANNER ===== */
+        .subpage-hero {
+            background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-navy) 60%, #1e3a8a 100%);
+            color: #ffffff;
+            padding: 3.5rem 0 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subpage-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.12) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .subpage-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            color: var(--brand-gold);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.35rem 0.85rem;
+            border-radius: var(--radius-pill);
+            margin-bottom: 0.75rem;
+        }
+
+        .subpage-title {
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .subpage-lead {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.75);
+            max-width: 650px;
+            margin-bottom: 0;
+        }
+
+        .subpage-breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 1.25rem;
+        }
+
+        .subpage-breadcrumbs a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .subpage-breadcrumbs a:hover {
+            color: var(--brand-gold);
+        }
+
+        /* ===== COMMON CARD DESIGN ===== */
+        .premium-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .premium-card:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-3px);
+            border-color: rgba(37, 99, 235, 0.3);
+        }
+
+        /* ===== BUTTON SYSTEM ===== */
+        .btn-modern {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0.65rem 1.5rem;
+            font-size: 0.92rem;
+            font-weight: 600;
+            border-radius: var(--radius-pill);
+            transition: var(--transition);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-modern-primary {
+            background: linear-gradient(135deg, var(--brand-blue) 0%, #1e40af 100%);
+            color: #ffffff;
+            box-shadow: var(--shadow-blue);
+        }
+
+        .btn-modern-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #172554 100%);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(29, 78, 216, 0.45);
+        }
+
+        .btn-modern-gold {
+            background: linear-gradient(135deg, var(--brand-gold) 0%, var(--brand-amber) 100%);
+            color: #ffffff;
+            box-shadow: var(--shadow-gold);
+        }
+
+        .btn-modern-gold:hover {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.45);
+        }
+
+        .btn-modern-outline {
+            background: transparent;
+            border: 1.5px solid var(--border-light);
+            color: var(--text-main);
+        }
+
+        .btn-modern-outline:hover {
+            background: var(--bg-surface-alt);
+            border-color: var(--brand-blue);
+            color: var(--brand-blue);
+        }
+
+        /* ===== FOOTER ===== */
+        .site-footer {
+            background-color: var(--brand-dark);
+            color: rgba(255, 255, 255, 0.75);
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+
+        .footer-top {
+            padding: 4.5rem 0 3rem;
+        }
+
+        .footer-brand h3 {
+            color: #ffffff;
+            font-size: 1.25rem;
+            margin-bottom: 0.35rem;
+            line-height: 1.3;
+        }
+
+        .footer-dept-tag {
+            color: var(--brand-gold);
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .footer-about-text {
+            font-size: 0.88rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-social-icons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .social-icon-btn:hover {
+            background: var(--brand-blue);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .footer-title {
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-title i {
+            color: var(--brand-gold);
+            font-size: 0.85rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.65rem;
+        }
+
+        .footer-links li a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.88rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links li a i {
+            font-size: 0.7rem;
+            color: var(--brand-gold);
+            transition: var(--transition);
+        }
+
+        .footer-links li a:hover {
+            color: #ffffff;
+            transform: translateX(4px);
+        }
+
+        .footer-links li a:hover i {
+            transform: translateX(2px);
+        }
+
+        .footer-contact-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 1rem;
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer-contact-row i {
+            color: var(--brand-gold);
+            margin-top: 4px;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .footer-map-frame {
+            width: 100%;
+            height: 160px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .footer-map-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .footer-bottom {
+            background-color: #030712;
+            padding: 1.25rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .footer-chips-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .live-chip {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.35rem 0.85rem;
+            border-radius: var(--radius-pill);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.78rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .live-chip i {
+            color: var(--brand-gold);
+        }
+
+        .live-chip strong {
+            color: #ffffff;
+        }
+
+        /* Go to Top Button */
+        .btn-scroll-top {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--brand-blue) 0%, #1e40af 100%);
+            color: #ffffff;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-blue);
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(12px);
+            transition: var(--transition);
+        }
+
+        .btn-scroll-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .btn-scroll-top:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #172554 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(29, 78, 216, 0.5);
+            color: #ffffff;
+        }
+
+        /* Form styling enhancements */
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label {
+            color: var(--brand-blue);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--brand-blue-light);
+            box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.15);
+        }
+
+        @media (max-width: 991.98px) {
+            .desktop-nav {
+                display: none;
+            }
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            .footer-chips-wrap {
+                justify-content: flex-start;
+                margin-top: 0.75rem;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Site Header & Navigation -->
+    <header class="site-header">
+        <div class="container-xl">
+            <div class="header-inner">
+                <!-- Logo & Brand -->
+                <a href="{% url 'index' %}" class="brand-wrapper">
+                    <div class="brand-icon-box">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="brand-text">
+                        <h1>Alumni <span>Portal</span></h1>
+                        <p>Parala Maharaja Engineering College &bull; PMEC</p>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <nav class="d-none d-lg-block">
+                    <ul class="desktop-nav">
+                        <li><a href="{% url 'index' %}" class="nav-link-item {% if request.resolver_match.url_name == 'index' %}active{% endif %}"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="{% url 'about_us' %}" class="nav-link-item {% if request.resolver_match.url_name == 'about_us' %}active{% endif %}"><i class="fas fa-university"></i> About Us</a></li>
+                        <li><a href="{% url 'index' %}#events" class="nav-link-item"><i class="fas fa-calendar-alt"></i> Events</a></li>
+                        <li><a href="{% url 'index' %}#alumni" class="nav-link-item"><i class="fas fa-award"></i> Hall of Fame</a></li>
+                        <li><a href="{% url 'gallery' %}" class="nav-link-item {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}"><i class="fas fa-images"></i> Gallery</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Navigation Actions -->
+                <div class="nav-actions">
+                    {% if request.session.alumni_id %}
+                        <!-- Alumni Logged In -->
+                        <div class="dropdown">
+                            <a href="#" class="user-pill-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle text-warning"></i>
+                                <span>{{ request.session.user_name|default:"My Account" }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end portal-menu-dropdown shadow-lg">
+                                <li><a class="dropdown-item" href="{% url 'alumni_profile' %}"><i class="fas fa-id-card"></i> View Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'edit_profile' %}"><i class="fas fa-user-edit"></i> Edit Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt text-danger"></i> Logout</a></li>
+                            </ul>
+                        </div>
+                    {% elif request.session.mentor_id %}
+                        <!-- Mentor Logged In -->
+                        <div class="dropdown">
+                            <a href="#" class="user-pill-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-tie text-info"></i>
+                                <span>Mentor: {{ request.session.user_name|default:"Dashboard" }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end portal-menu-dropdown shadow-lg">
+                                <li><a class="dropdown-item" href="{% url 'mentor_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Mentor Workspace</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt text-danger"></i> Logout</a></li>
+                            </ul>
+                        </div>
+                    {% elif request.session.coordinator_id %}
+                        <!-- Coordinator Logged In -->
+                        <div class="dropdown">
+                            <a href="#" class="user-pill-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-shield-alt text-success"></i>
+                                <span>Coordinator Console</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end portal-menu-dropdown shadow-lg">
+                                <li><a class="dropdown-item" href="{% url 'coordinator_dashboard' %}"><i class="fas fa-columns"></i> Coordinator Dashboard</a></li>
+                                <li><a class="dropdown-item" href="/admin/" target="_blank"><i class="fas fa-cog"></i> Django Admin</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt text-danger"></i> Logout</a></li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <!-- Guest User Dropdown -->
+                        <div class="dropdown">
+                            <button class="btn-portal-dropdown dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-lock"></i>
+                                <span>Portal Access</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end portal-menu-dropdown shadow-lg">
+                                <li><h6 class="dropdown-header text-uppercase text-muted" style="font-size:0.75rem;letter-spacing:1px;">Alumni Services</h6></li>
+                                <li><a class="dropdown-item" href="{% url 'alumni_login' %}"><i class="fas fa-sign-in-alt"></i> Alumni Login</a></li>
+                                <li><a class="dropdown-item" href="{% url 'alumni_registration' %}"><i class="fas fa-user-plus"></i> Alumni Registration</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><h6 class="dropdown-header text-uppercase text-muted" style="font-size:0.75rem;letter-spacing:1px;">Faculty &amp; Admin</h6></li>
+                                <li><a class="dropdown-item" href="{% url 'batch_mentor_login' %}"><i class="fas fa-user-tie"></i> Batch Mentor Login</a></li>
+                                <li><a class="dropdown-item" href="{% url 'alumni_coordinator_login' %}"><i class="fas fa-shield-alt"></i> Coordinator Login</a></li>
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    <!-- Mobile Drawer Toggle -->
+                    <button class="mobile-menu-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNavDrawer" aria-controls="mobileNavDrawer" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Offcanvas Menu -->
+    <div class="offcanvas offcanvas-end mobile-drawer" tabindex="-1" id="mobileNavDrawer" aria-labelledby="mobileNavDrawerLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title heading-font text-white" id="mobileNavDrawerLabel">
+                <i class="fas fa-graduation-cap text-warning me-2"></i> Alumni Portal
+            </h5>
+            <button type="button" class="btn-close btn-close-white text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column justify-content-between p-4">
+            <div>
+                <p class="text-muted text-uppercase" style="font-size:0.75rem;letter-spacing:1px;">Main Navigation</p>
+                <nav class="d-flex flex-column gap-2 mb-4">
+                    <a href="{% url 'index' %}" class="nav-link-mobile"><i class="fas fa-home text-info"></i> Home</a>
+                    <a href="{% url 'about_us' %}" class="nav-link-mobile"><i class="fas fa-university text-info"></i> About Us</a>
+                    <a href="{% url 'index' %}#events" class="nav-link-mobile"><i class="fas fa-calendar-alt text-info"></i> Events Board</a>
+                    <a href="{% url 'index' %}#alumni" class="nav-link-mobile"><i class="fas fa-award text-info"></i> Hall of Fame</a>
+                    <a href="{% url 'gallery' %}" class="nav-link-mobile"><i class="fas fa-images text-info"></i> Gallery</a>
+                </nav>
+
+                <p class="text-muted text-uppercase" style="font-size:0.75rem;letter-spacing:1px;">Portal Portals</p>
+                <div class="d-grid gap-2">
+                    {% if request.session.alumni_id %}
+                        <a href="{% url 'alumni_profile' %}" class="btn btn-primary text-start"><i class="fas fa-user me-2"></i> My Profile</a>
+                        <a href="{% url 'logout' %}" class="btn btn-outline-danger text-start"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+                    {% elif request.session.mentor_id %}
+                        <a href="{% url 'mentor_dashboard' %}" class="btn btn-primary text-start"><i class="fas fa-tachometer-alt me-2"></i> Mentor Workspace</a>
+                        <a href="{% url 'logout' %}" class="btn btn-outline-danger text-start"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+                    {% elif request.session.coordinator_id %}
+                        <a href="{% url 'coordinator_dashboard' %}" class="btn btn-primary text-start"><i class="fas fa-columns me-2"></i> Coordinator Console</a>
+                        <a href="{% url 'logout' %}" class="btn btn-outline-danger text-start"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+                    {% else %}
+                        <a href="{% url 'alumni_login' %}" class="btn btn-outline-light text-start"><i class="fas fa-sign-in-alt text-warning me-2"></i> Alumni Login</a>
+                        <a href="{% url 'alumni_registration' %}" class="btn btn-warning text-start text-dark fw-bold"><i class="fas fa-user-plus me-2"></i> Register as Alumni</a>
+                        <a href="{% url 'batch_mentor_login' %}" class="btn btn-outline-light text-start"><i class="fas fa-user-tie text-info me-2"></i> Mentor Login</a>
+                        <a href="{% url 'alumni_coordinator_login' %}" class="btn btn-outline-light text-start"><i class="fas fa-shield-alt text-success me-2"></i> Coordinator Login</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-top border-secondary text-muted" style="font-size:0.8rem;">
+                <p class="mb-0">Parala Maharaja Engineering College, Berhampur, Odisha</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flash Messages -->
+    {% if messages %}
+        <div class="flash-container">
+            {% for message in messages %}
+                <div class="custom-alert {% if message.tags == 'success' %}alert-success-custom{% elif message.tags == 'error' %}alert-error-custom{% else %}alert-info-custom{% endif %} alert-dismissible fade show" role="alert">
+                    <div class="fs-5">
+                        {% if message.tags == 'success' %}<i class="fas fa-check-circle text-success"></i>
+                        {% elif message.tags == 'error' %}<i class="fas fa-exclamation-triangle text-danger"></i>
+                        {% else %}<i class="fas fa-info-circle text-primary"></i>{% endif %}
+                    </div>
+                    <div class="flex-grow-1" style="font-size: 0.9rem;">
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close ms-2" data-bs-dismiss="alert" aria-label="Close" style="font-size: 0.75rem;"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Body Content Block -->
+    <main class="flex-grow-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Go to Top Button -->
+    <button class="btn-scroll-top" id="btnScrollTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'});" aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="container-xl">
+                <div class="row g-4 g-lg-5">
+                    <!-- Column 1: College & Dept Info -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-brand">
+                            <h3>Parala Maharaja<br><span class="text-white-50">Engineering College</span></h3>
+                            <span class="footer-dept-tag"><i class="fas fa-microchip me-1"></i> Department of Electronics &amp; Telecommunication</span>
+                            <p class="footer-about-text">
+                                Empowering future-ready engineers through world-class technical education, innovative research, and an active global network of accomplished alumni.
+                            </p>
+                            <div class="footer-social-icons">
+                                <a href="https://pmec.ac.in" target="_blank" rel="noopener" class="social-icon-btn" title="Official Website"><i class="fas fa-globe"></i></a>
+                                <a href="https://www.linkedin.com" target="_blank" rel="noopener" class="social-icon-btn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="https://www.facebook.com" target="_blank" rel="noopener" class="social-icon-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                <a href="https://www.instagram.com" target="_blank" rel="noopener" class="social-icon-btn" title="Instagram"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Quick Links -->
+                    <div class="col-lg-2 col-md-6 col-6">
+                        <h4 class="footer-title"><i class="fas fa-link"></i> Navigation</h4>
+                        <ul class="footer-links">
+                            <li><a href="{% url 'index' %}"><i class="fas fa-chevron-right"></i> Home</a></li>
+                            <li><a href="{% url 'about_us' %}"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                            <li><a href="{% url 'index' %}#events"><i class="fas fa-chevron-right"></i> Event Board</a></li>
+                            <li><a href="{% url 'index' %}#alumni"><i class="fas fa-chevron-right"></i> Top Alumni</a></li>
+                            <li><a href="{% url 'gallery' %}"><i class="fas fa-chevron-right"></i> Photo Gallery</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 3: Portals & External Links -->
+                    <div class="col-lg-2 col-md-6 col-6">
+                        <h4 class="footer-title"><i class="fas fa-external-link-alt"></i> Resources</h4>
+                        <ul class="footer-links">
+                            <li><a href="{% url 'alumni_registration' %}"><i class="fas fa-chevron-right"></i> Register</a></li>
+                            <li><a href="{% url 'alumni_login' %}"><i class="fas fa-chevron-right"></i> Alumni Login</a></li>
+                            <li><a href="{% url 'batch_mentor_login' %}"><i class="fas fa-chevron-right"></i> Mentor Login</a></li>
+                            <li><a href="https://pmec.ac.in" target="_blank" rel="noopener"><i class="fas fa-chevron-right"></i> PMEC Portal</a></li>
+                            <li><a href="http://www.bput.ac.in" target="_blank" rel="noopener"><i class="fas fa-chevron-right"></i> BPUT Odisha</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 4: Location & Contact -->
+                    <div class="col-lg-4 col-md-6">
+                        <h4 class="footer-title"><i class="fas fa-map-marker-alt"></i> Contact &amp; Campus</h4>
+                        <div class="footer-contact-row">
+                            <i class="fas fa-map-pin"></i>
+                            <div>Sitalapalli, Berhampur, Ganjam - 761003, Odisha, India</div>
+                        </div>
+                        <div class="footer-contact-row">
+                            <i class="fas fa-phone-alt"></i>
+                            <div>+91 0680-2292900 / 2292901 &bull; Mob: 9876543210</div>
+                        </div>
+                        <div class="footer-contact-row">
+                            <i class="fas fa-envelope"></i>
+                            <div>contact@pmec.ac.in</div>
+                        </div>
+                        <div class="footer-map-frame mt-2">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3768.12595058778!2d84.7733527749803!3d19.189679182039203!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a3d508e6f1f4561%3A0xe104fcb0a944806a!2sParala%20Maharaja%20Engineering%20College%20(PMEC)%20Berhampur!5e0!3m2!1sen!2sin!4v1700000000000"
+                                title="PMEC Campus Location Map" allowfullscreen="" loading="lazy"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sub Footer -->
+        <div class="footer-bottom">
+            <div class="container-xl">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start mb-2 mb-md-0">
+                        <p class="mb-0">&copy; 2025 Alumni Management Portal &bull; Parala Maharaja Engineering College (PMEC).</p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="footer-chips-wrap">
+                            <div class="live-chip" id="footer-live-clock">
+                                <i class="fas fa-clock"></i> <span id="clock-text">--:--:--</span>
+                            </div>
+                            <div class="live-chip">
+                                <i class="fas fa-users"></i> Visitors: <strong id="footer-visitor-count">{{ visitor_count|default:"1" }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Real-time Clock
+        function updateLiveClock() {
+            const clockEl = document.getElementById('clock-text');
+            if (clockEl) {
+                const now = new Date();
+                const options = { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true, month: 'short', day: 'numeric', year: 'numeric' };
+                clockEl.textContent = now.toLocaleString('en-IN', options);
+            }
+        }
+        updateLiveClock();
+        setInterval(updateLiveClock, 1000);
+
+        // Fetch Live Visitor Count API
+        function refreshVisitorCount() {
+            fetch('/api/visitor_count/')
+                .then(res => res.json())
+                .then(data => {
+                    const el = document.getElementById('footer-visitor-count');
+                    if (el && data.visitor_count !== undefined) {
+                        el.textContent = data.visitor_count;
+                    }
+                })
+                .catch(err => console.debug('Visitor count fetch:', err));
+        }
+        refreshVisitorCount();
+
+        // Scroll to Top Button Visibility
+        const scrollTopBtn = document.getElementById('btnScrollTop');
+        window.addEventListener('scroll', () => {
+            if (scrollTopBtn) {
+                if (window.scrollY > 350) {
+                    scrollTopBtn.classList.add('show');
+                } else {
+                    scrollTopBtn.classList.remove('show');
+                }
+            }
+        });
+
+        // Auto-dismiss Flash Alerts
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.custom-alert');
+            alerts.forEach(alert => {
+                const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

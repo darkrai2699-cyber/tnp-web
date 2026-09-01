@@ -1,0 +1,330 @@
+{% extends 'alumni/base.html' %}
+{% load static %}
+{% load tz %}
+
+{% block title %}Coordinator Console | Alumni Portal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .coord-dash-hero {
+        background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
+        padding: 4rem 0;
+        color: #ffffff;
+        position: relative;
+    }
+
+    .kpi-stat-card {
+        background: #ffffff;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-light);
+        box-shadow: var(--shadow-md);
+        padding: 1.75rem;
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        transition: var(--transition);
+    }
+
+    .kpi-stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .kpi-icon-box {
+        width: 56px;
+        height: 56px;
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .kpi-icon-blue { background: #eff6ff; color: #2563eb; }
+    .kpi-icon-gold { background: #fef3c7; color: #d97706; }
+    .kpi-icon-green { background: #ecfdf5; color: #059669; }
+    .kpi-icon-purple { background: #f5f3ff; color: #7c3aed; }
+
+    .kpi-number {
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.85rem;
+        font-weight: 800;
+        color: var(--text-main);
+        line-height: 1;
+        margin-bottom: 0.25rem;
+    }
+
+    .kpi-label {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    .content-panel-card {
+        background: #ffffff;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-light);
+        box-shadow: var(--shadow-md);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .custom-table th {
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        font-weight: 700;
+        color: var(--text-light);
+        background: var(--bg-surface-alt);
+        padding: 0.85rem 1rem;
+    }
+
+    .custom-table td {
+        padding: 1rem;
+        vertical-align: middle;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Coordinator Hero -->
+<section class="coord-dash-hero">
+    <div class="container-xl position-relative">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold text-uppercase mb-2">
+                    <i class="fas fa-shield-alt me-1"></i> Department Coordinator Console
+                </span>
+                <h1 class="heading-font fw-bold text-white fs-1 mb-1">Welcome, {{ coordinator.name }}</h1>
+                <p class="text-white-50 mb-0">E&amp;TC Department Alumni Management &bull; Administrative Operations</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="/admin/" target="_blank" class="btn btn-warning rounded-pill px-4 fw-bold text-dark shadow-sm">
+                    <i class="fas fa-cog me-1"></i> Django Admin
+                </a>
+                <a href="{% url 'logout' %}" class="btn btn-outline-light rounded-pill px-3">
+                    <i class="fas fa-sign-out-alt me-1"></i> Sign Out
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- KPI Metrics Grid -->
+<div class="container-xl" style="margin-top: -2.5rem; position: relative; z-index: 10;">
+    <div class="row g-3 mb-4">
+        <div class="col-xl-3 col-sm-6">
+            <div class="kpi-stat-card">
+                <div class="kpi-icon-box kpi-icon-blue">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div>
+                    <div class="kpi-number">{{ stats.total_alumni }}</div>
+                    <div class="kpi-label">Registered Alumni</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+            <div class="kpi-stat-card">
+                <div class="kpi-icon-box kpi-icon-gold">
+                    <i class="fas fa-award"></i>
+                </div>
+                <div>
+                    <div class="kpi-number">{{ stats.top_alumni }}</div>
+                    <div class="kpi-label">Distinguished Alumni</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+            <div class="kpi-stat-card">
+                <div class="kpi-icon-box kpi-icon-green">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div>
+                    <div class="kpi-number">{{ stats.total_events }}</div>
+                    <div class="kpi-label">Active Events</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+            <div class="kpi-stat-card">
+                <div class="kpi-icon-box kpi-icon-purple">
+                    <i class="fas fa-images"></i>
+                </div>
+                <div>
+                    <div class="kpi-number">{{ stats.total_photos }}</div>
+                    <div class="kpi-label">Gallery Captures</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Operations Section -->
+<section class="py-4">
+    <div class="container-xl">
+        <div class="row g-4">
+            <!-- Left: Event Broadcast & Management -->
+            <div class="col-lg-6">
+                <div class="content-panel-card">
+                    <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom">
+                        <h3 class="heading-font fw-bold fs-4 mb-0">
+                            <i class="fas fa-calendar-plus text-success me-2"></i> Post New Event
+                        </h3>
+                    </div>
+
+                    <form method="post" enctype="multipart/form-data" action="{% url 'coordinator_dashboard' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add_event">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Event Title</label>
+                            {{ event_form.title }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Event Date</label>
+                            {{ event_form.date }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Event Description</label>
+                            {{ event_form.description }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Event Attachment / Flyer (Optional)</label>
+                            {{ event_form.media }}
+                        </div>
+
+                        <button type="submit" class="btn btn-success rounded-pill px-4 py-2 fw-bold w-100">
+                            <i class="fas fa-paper-plane me-1"></i> Broadcast Event
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Event Roster Table -->
+                <div class="content-panel-card">
+                    <h3 class="heading-font fw-bold fs-4 mb-3 pb-2 border-bottom">
+                        <i class="fas fa-list-alt text-primary me-2"></i> Published Events
+                    </h3>
+                    <div class="table-responsive">
+                        <table class="table custom-table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Event Details</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ev in events %}
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">{{ ev.title }}</div>
+                                        <small class="text-muted">{{ ev.description|truncatewords:10 }}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-dark fw-bold">{{ ev.date|date:"d M Y" }}</span>
+                                    </td>
+                                    <td>
+                                        <form method="post" action="{% url 'coordinator_dashboard' %}" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="delete_event">
+                                            <input type="hidden" name="event_id" value="{{ ev.id }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle" style="width:32px;height:32px;padding:0;" title="Delete Event">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4">No events created yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Alumni Directory & Mentors -->
+            <div class="col-lg-6">
+                <!-- Batch Mentors Overview -->
+                <div class="content-panel-card mb-4">
+                    <h3 class="heading-font fw-bold fs-4 mb-3 pb-2 border-bottom">
+                        <i class="fas fa-chalkboard-teacher text-warning me-2"></i> Department Batch Mentors
+                    </h3>
+                    <div class="row g-3">
+                        {% for ment in mentors %}
+                        <div class="col-sm-6">
+                            <div class="p-3 bg-light rounded-3 border">
+                                <h5 class="fw-bold fs-6 mb-1">{{ ment.full_name }}</h5>
+                                <p class="text-muted small mb-1"><i class="fas fa-user-circle me-1"></i> {{ ment.username }}</p>
+                                <div class="small">
+                                    <span class="text-muted">Batches:</span>
+                                    {% for y in ment.assigned_batches.all %}
+                                        <span class="badge bg-warning text-dark px-1 py-0" style="font-size:0.7rem;">{{ y.year }}</span>
+                                    {% empty %}
+                                        <span class="badge bg-secondary text-white px-1 py-0" style="font-size:0.7rem;">All</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12 text-muted small py-2">
+                            No mentors configured. Add mentors via Django Admin.
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Recent Registered Alumni -->
+                <div class="content-panel-card">
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                        <h3 class="heading-font fw-bold fs-4 mb-0">
+                            <i class="fas fa-users text-primary me-2"></i> Recent Alumni
+                        </h3>
+                        <a href="/admin/alumni/alumni/" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">
+                            Manage All in Admin <i class="fas fa-external-link-alt ms-1"></i>
+                        </a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table custom-table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Alumni</th>
+                                    <th>Batch</th>
+                                    <th>Current Company</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for a in alumni_list|slice:":10" %}
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">{{ a.full_name }}</div>
+                                        <small class="text-muted">{{ a.email }}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary bg-opacity-10 text-primary fw-bold">{{ a.graduation_year }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted small">{{ a.current_company|default:"-" }}</span>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4">No alumni registered yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
