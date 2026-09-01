@@ -1,0 +1,15 @@
+runtime: python312
+entrypoint: cd AlumniManagement && gunicorn -b :$PORT AlumniManagement.wsgi:application
+
+instance_class: F1
+
+env_variables:
+  DJANGO_SETTINGS_MODULE: 'AlumniManagement.settings'
+
+handlers:
+  - url: /static
+    static_dir: AlumniManagement/staticfiles
+
+  - url: /.*
+    script: auto
+    secure: always
